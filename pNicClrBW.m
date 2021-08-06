@@ -5,7 +5,7 @@ function y=pNicClrBW(iC);
 
 NicClrBW=[0.1 0.6 0.1;...
           1.0 0.6 0.0;...
-          0.8 0.8 1.0];
+          0.8 0.8 1.0;];
      
 nClr=size(NicClrBW,1);
 
