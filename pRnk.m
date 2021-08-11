@@ -1,4 +1,4 @@
-function R=pRanks(X);
+function R=pRnk(X);
 
 [n,p]=size(X);
 

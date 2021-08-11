@@ -19,7 +19,7 @@ if nargin<=4;
     S.Gap.L=0.10; % Fraction gap on left hand size (for ylabel)
     S.Gap.R=0.01; % Fraction gap on right hand size
     
-    S.Ext.X=0.5; % Fraction of the x-extent of full screen to use
+    S.Ext.X=1; % Fraction of the x-extent of full screen to use
     S.Ext.Y=1; % Fraction of the y-extent of full screen to use
     
     S.Font.A=20;
