@@ -1,5 +1,5 @@
-function ChiBar=pChiBar(X,NepVct,nBS);
-%function ChiBar=pChiBar(X,NepVct,nBS);
+function ChiBar=pChiBarEta(X,NepVct,nBS);
+%function ChiBar=pChiBarEta(X,NepVct,nBS);
 %
 %PhJ 20210811
 %
@@ -12,10 +12,8 @@ function ChiBar=pChiBar(X,NepVct,nBS);
 % ChiBar nBS x p values of ChiBar for nBS bootstrap resamples and p thresholds
 %
 %The calculation is as follows
-% 1. Estimate ChiBar(u) directly from its definition
-%    ChiBar(u) = [2 log(Pr(U>u)) / log(Pr(U>u, V>u))] - 1
-%    where U and V are uniform-scale versions of X and Y
-%    ie U = F_X(X) and V=F_Y(Y) with F_X and F_Y estimated empirically from ranks
+% 1. Estimate Eta(u) using the method of Ledford and Tawn. www.lancs.ac.uk/~jonathan/EKJ11.pdf Appendix A
+% 2. Estimate ChiBar(u) using ChiBar=2*Eta-1
 %
 %Basics
 % If ChiBar(inf)=1 => Asymptotic Dependence
@@ -38,7 +36,7 @@ n=size(X,1);
 p=size(NepVct,1);
 
 % Estimate Eta(u)
-ChiBar=nan(nBS,p);
+Eta=nan(nBS,p);
 for iB=1:nBS;
     
     % Create bootstrap resample
@@ -54,20 +52,29 @@ for iB=1:nBS;
     tR=pRnk(tX);
     tU=(tR+0.5)/(n+1);
     
-    % Define threshold (this is just NEP because we're on uniform scale)
-    Thr=NepVct;
+    % Transform threshold exceedances to Frechet scale
+    tF=-1./log(tU);
+    
+    % Find minimum of Frechet variate values
+    tM=min(tF,[],2);
+    
+    Thr=quantile(tM,NepVct);
     
     % Loop over thresholds
     for j=1:p;
         
-        % Direct calculation of ChiBar
-        u=Thr(j); % threshold
-        tDnm=log(sum(tU(:,1)>u & tU(:,2)>u)/n); % log(Pr(U>u, V>u))
-        ChiBar(iB,j)=(2*log(1-u)/tDnm)-1; 
+        % Fit GP to minimum of Frechet-scale threshold exceedances
+        if sum(tM>Thr(j))>40;
+            tP=gpfit(tM(tM>Thr(j))-Thr(j));
+            Eta(iB,j)=tP(1);
+        end;
         
     end;
     
 end;
+
+% Estimate ChiBar(u)
+ChiBar=2*Eta-1;
 
 if nargin==0;
     clf;hold on;
