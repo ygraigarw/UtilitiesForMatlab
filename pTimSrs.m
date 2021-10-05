@@ -1,5 +1,5 @@
-function pTimSrs(X0,names,indx,ind,prow,pcol,abscX,ttl)
-%function pTimSrs(X0,names,indx,ind,prow,pcol,abscX)
+function pTimSrs(X0,names,indx,ind,prow,pcol,abscX,ttl,MVCod)
+%function pTimSrs(X0,names,indx,ind,prow,pcol,abscX,ttl,MVCod)
 %
 % PJ 05.09.97
 %
@@ -17,25 +17,6 @@ function pTimSrs(X0,names,indx,ind,prow,pcol,abscX,ttl)
 % pcol 	number of horizontal plots per page of output
 % abscX alternative vector for X-axis
 % If these are not specified prow=5, pcol=4 assumed
- 
-if nargin<4;
-  fprintf(1,'Insufficient arguments. Terminating\n');
-else;
-  if nargin==4;
-    fprintf(1,'Assuming 5x4 landscape\n');
-    orient landscape;
-    prow=5;
-    pcol=4;
-  else;
-    if prow>pcol;
-      fprintf(1,'Assuming tall\n');
-      orient tall;
-    else;
-      fprintf(1,'Assuming landscape\n');
-      orient landscape;
-    end;
-  end;
-end;
 
 ppic=prow*pcol;
 
@@ -66,18 +47,13 @@ ppic=prow*pcol;
 
     subplot(prow,pcol,p);
     
-    %orient landscape;
-    %orient tall;
     orient portrait;
-    t1=a==-99;t2=sum(t1')';t3=t2==0;b=a(t3,:);
-    c=pSwpMV(a);
-    %pPlt(c(:,1),c(:,2),'k.-');
-    %   plot(b(:,1),b(:,2),'r*');
-    pPlt(a(:,1),a(:,2),'k.-',0);
-    %hist(b(:,2),10);
-	%    pPlt(a(:,1),a(:,2),'k',0);
-    %   pplt_contig(a(:,1),a(:,2),1,'k.',0);
-    % hist(b(:,2),100)
+    if isnan(MVCod)==0;
+        t1=a==MVCod;t2=sum(t1')';t3=t2==0;b=a(t3,:);
+    else;
+        t1=isnan(a)==1;t2=sum(t1')';t3=t2==0;b=a(t3,:);        
+    end;
+    pPlt(b(:,1),b(:,2),'k.-',0);
     pDflSml;
 	axis('tight')
     
@@ -86,25 +62,12 @@ ppic=prow*pcol;
     if indx>0 & (((prow*pcol-p) < pcol) | (size(ind,1)-j<tmp));
       xlabel([ names(indx,:) ]);
     end;
-    %ylabel([ int2str(ind(j)) ' : #MV= ' int2str(sum(t2==1))]);
     ylabel([ int2str(ind(j)) ' : #Counts= ' int2str(sum(isnan(b(:,2))==0))]);
 
     if ( p==ppic | j==size(ind,1));
       fprintf(1,'printing ');
-      %eval(['print -dpsc out' int2str(j)]); 
       pDatStm(ttl);
-      if nargin==8;
-          pGI(sprintf('%s%g',ttl,j));
-      else;
-          pGI(sprintf('out%g',j));
-      end;          
-      %eval(['print -djpeg out' int2str(j)]); 
-      %eval(['print -djpeg ' ttl]); 
-      %eval(['print -dps out' int2str(j)]); 
-      %print -dpsc -append out.ps ;
-      %print -dbmp out.bmp ;
-      %pause;
-	  clf;
+      pGI(sprintf('%s%g',ttl,j),2);
     end;
 
   end;
