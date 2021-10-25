@@ -6,7 +6,7 @@ if nargin==0;
     Wdt=0.4; %half width on x axis
     Clr='r'; %color
     Thc=2; %line thickness
-    X=randn(100,1); 
+    X=randn(5,1); 
 end;
 
 %% Key summary statistics

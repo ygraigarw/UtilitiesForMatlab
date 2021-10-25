@@ -2,7 +2,7 @@ function y=pKLDvr(X1,X2,nQ);
 %function y=pKLDvr(X1,X2,nQ);
 %
 % X1 and X2 are random samples from two distributions for comparison
-% nQ is the number of quantile to use to partition the joint sample
+% nQ is the number of quantiles to use to partition the joint sample
 %
 % X1 is anticipated to be an array size n x 1 (i.e. a set of observed data)
 % X2 is anticipated to be another sample size m x 1 (i.e. another set of observed data)
