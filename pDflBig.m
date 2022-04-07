@@ -10,7 +10,7 @@
 %20100912 - Refined header
 
 %hold on;
-set(gca,'FontSize',30,'FontName','Garamond');
+set(gca,'FontSize',25,'FontName','Garamond');
 grid on;
 box on;
 % debug - HvZ
