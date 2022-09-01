@@ -11,11 +11,7 @@ end;
 
 %% Key summary statistics
 Q=quantile(X,[0.025 .25 .5 .75 .975]); %quantiles to use, quantile function removes NaN as missing values
-Avr=nanmean(X); %average
-
-if sum(isnan(X))>0;
-    fprintf(1,'WARNING: pBoxWhs: ignored %g NaN\n',sum(isnan(X)));
-end;
+Avr=mean(X(~isnan(X))); %average
 
 hold on;
 plot((Lct-Wdt)*ones(2,1),Q([2 4]),'color',Clr,'linewidth',Thc);

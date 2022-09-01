@@ -1,8 +1,9 @@
-function [tL,tB]=pDns(X,nB,Clr,LinWdt);
+function [tL,tB]=pHst(X,nB,Clr,LinWdt);
 
 % X      n x 1 data
 % nB     1 x 1 number of bins
-% Clr    1 x 1 single character MATLAB colour
+% Clr    1 x 1 single character MATLAB colour, or colour character + line
+% style characters
 % LinWdt 1 x 1 MATLAB line width
 
 if nargin==0;
@@ -36,13 +37,17 @@ if isempty(X)==0;
     else;
         tRng=linspace(min(X),max(X),nB);
     end;
-    [tB,tL]=hist(X,tRng);
+    tB=hist(X,tRng);
     
-    tB=tB/(sum(tB)*(range(tRng)/nB));
+    tB=tB/(sum(tB)*(tRng(2)-tRng(1)));
     
     hold on;
-    h=bar(tL,tB,'hist');
-    set(h,'FaceAlpha',0,'LineWidth',LinWdt,'EdgeColor',Clr);
+    h=bar(tRng,tB,'hist');
+    if length(Clr)==1;
+        set(h,'FaceAlpha',0,'LineWidth',LinWdt,'EdgeColor',Clr(1));
+    else;
+        set(h,'FaceAlpha',0,'LineWidth',LinWdt,'EdgeColor',Clr(1),'LineStyle',Clr(2:end));
+    end;
     
 end;
 

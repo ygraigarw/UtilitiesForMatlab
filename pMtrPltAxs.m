@@ -24,10 +24,18 @@ if nargin<=4;
     
     S.Font.A=20;
     S.Font.L=30;
+    
+    S.UseGcf=1;
 end;
 
 % Create a full screen figure
-h1=figure('units','normalized','outerposition',[0 0 1 1]);
+if isempty(S.UseGcf)==0;
+    h1=gcf;
+    h1.Units='normalized';
+    h1.OuterPosition=[0 0 1 1];
+else;
+    h1=figure('units','normalized','outerposition',[0 0 1 1]);
+end;
 posfig = get(h1,'Position');
 
 % Create and plot into axes
